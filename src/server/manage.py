@@ -22,9 +22,10 @@ def run():
     after adding the routes using the methods in routes folder
     """
     add_resources(app)
-     app.register_blueprint(api_blueprint)
+    app.register_blueprint(api_blueprint)
     register_blueprints(app)
     app.run()
+
 
 @manager.command
 def test():
@@ -36,6 +37,7 @@ def test():
     if result.wasSuccessful():
         return 0
     return 1
+
 
 if __name__ == "__main__":
     manager.run()
