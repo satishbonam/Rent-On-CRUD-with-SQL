@@ -1,20 +1,23 @@
 from flask import Flask, request
 from flask_restful import Resource, reqparse
 from app.main import db
-from app.main.utils import validate_user
+from app.main.utils.validate_user import validate_user
+from app.main.services.property import create_property, delete_property, edit_property, get_properties_all
 
 
 class Property(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('area', type=str, required=True)
     parser.add_argument('bedrooms', type=str, required=True)
-    parser.add_argument('furnishing', type=str, required=True)
+    parser.add_argument('furnishing', type=bool, required=False, default=False)
     parser.add_argument('locality', type=str, required=True)
+    parser.add_argument('isRented', type=bool, required=False, default=False)
+    parser.add_argument('amenitines', type=dict, required=True, default={})
 
     @classmethod
     def post(self):
         auth_token = request.headers.get("token")
-        data = CreateProperty.parser.parse_args()
+        data = Property.parser.parse_args()
 
         flag_validate, token_data = validate_user(auth_token)
         data['owner_id'] = token_data['id']
@@ -52,13 +55,15 @@ class EditProperty(Resource):
     parser.add_argument('property_id', type=int, required=True)
     parser.add_argument('area', type=str, required=True)
     parser.add_argument('bedrooms', type=str, required=True)
-    parser.add_argument('furnishing', type=str, required=True)
+    parser.add_argument('furnishing', type=bool, required=False, default=False)
     parser.add_argument('locality', type=str, required=True)
+    parser.add_argument('isRented', type=bool, required=False, default=False)
+    parser.add_argument('amenitines', type=dict, required=True, default={})
 
     @classmethod
     def post(self):
         auth_token = request.headers.get("token")
-        data = CreateProperty.parser.parse_args()
+        data = EditProperty.parser.parse_args()
 
         flag_validate, token_data = validate_user(auth_token)
 
@@ -81,7 +86,7 @@ class DeleteProperty(Resource):
     @classmethod
     def post(self):
         auth_token = request.headers.get("token")
-        data = CreateProperty.parser.parse_args()
+        data = DeleteProperty.parser.parse_args()
 
         flag_validate, token_data = validate_user(auth_token)
 
