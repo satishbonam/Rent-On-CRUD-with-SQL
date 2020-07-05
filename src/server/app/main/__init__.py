@@ -1,7 +1,7 @@
 """ Creation of Flask object along with configuration based on environment name specified in the settings file"""
 import logging
 from datetime import datetime as dt
-from flask import Flask, request
+from flask import Flask, request, Blueprint
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_restful import Api
@@ -33,9 +33,10 @@ def create_app(config_name):
     def after_request(response):
         """ Logging after every request. """
         if app.config['ENV'] == 'development':
-            app.logger.info('The Response\n%s'%(response))
+            app.logger.info('The Response\n%s' % (response))
         return response
     return app
+
 
 def add_extentions(app):
     # api.init_app(app)
